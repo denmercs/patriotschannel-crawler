@@ -27,4 +27,30 @@ router.post(
   })
 );
 
+// @desc    Auth user, match password & get token
+// @route   POST /users/login
+// @access public
+
+router.post(
+  "/login",
+  asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
+
+    const user = await User.find({ email });
+
+    if (user) {
+      if (bcrypt.compareSync(password, user[0].password)) {
+        res.send({
+          _id: user[0]._id,
+          username: user[0].username,
+          email: user[0].email,
+          isAdmin: user[0].isAdmin,
+          token: generateToken(user[0]._id),
+        });
+        return;
+      }
+    }
+    res.status(401).send({ message: "Invalid email or password" });
+  })
+);
 module.exports = router;

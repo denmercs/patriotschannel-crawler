@@ -1,5 +1,10 @@
 const express = require("express");
+const userRouter = require("./routes/userRouter");
 
-const server = express();
+const app = express();
 
-module.exports = server;
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/user", userRouter);
+
+module.exports = app;

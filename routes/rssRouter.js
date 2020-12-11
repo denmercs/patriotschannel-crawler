@@ -29,44 +29,47 @@ router.get(
 
     let oannDatas;
     if (oann !== undefined) {
-      oannDatas = oannData(oann);
+      oannDatas = oannDataRefactor(oann);
+      saveNewsDatas(oannDatas, "OANN");
     }
-    console.log("this is the oann datas", oannDatas);
-    // const newsData = await News.find();
-    // if (feeds !== undefined) {
-    //   feeds.items.map((item, index) => {
-    //     if (newsData.length === 0 || item.title !== newsData[index].title) {
-    //       console.log("this is an empty news");
-    //       News.insertMany({
-    //         title: item.title,
-    //         url: item.link,
-    //         source: "NewsMax",
-    //         imageUrl: item.enclosure.url,
-    //         content: item.content,
-    //         pubDate: item.pubDate,
-    //       });
-    //     }
-    //   });
-    // }
 
     const news = await News.find();
     res.status(200).json(news);
   })
 );
 
-function oannData(feeds) {
+function oannDataRefactor(feeds) {
   let datas = [];
   feeds.items.map((feed) => {
     datas.push({
       title: feed.title,
       url: feed.link,
       source: "OANN",
-      imageUrl: feed.content.match(/<\/?[^>]+>/gi),
+      imageUrl: feed.content.match(/<img\/?[^>]+>/gi),
       pubDate: feed.pubDate,
       content: feed.content.replace(/<\/?[^>]+>/gi, ""),
     });
   });
   return datas;
+}
+
+async function saveNewsDatas(news, newsSource) {
+  console.log("this is the news", news);
+  const newsData = await News.find();
+  if (news !== undefined) {
+    news.map((item, index) => {
+      if (newsData.length === 0 || item.title !== newsData[index].title) {
+        News.insertMany({
+          title: item.title,
+          url: item.url,
+          source: newsSource,
+          imageUrl: item.imageUrl,
+          content: item.content,
+          pubDate: item.pubDate,
+        });
+      }
+    });
+  }
 }
 
 module.exports = router;

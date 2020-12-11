@@ -13,11 +13,9 @@ const newsSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  source: [
-    {
-      type: String,
-    },
-  ],
+  source: {
+    type: String,
+  },
   pubDate: {
     type: String,
   },
@@ -27,9 +25,12 @@ const newsSchema = mongoose.Schema({
   language: {
     type: String,
   },
-  imageUrl: {
-    type: String,
-  },
+  imageUrl: [
+    {
+      type: String,
+    },
+  ],
+
   content: {
     type: String,
   },

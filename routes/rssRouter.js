@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const Parser = require("rss-parser");
 const parser = new Parser();
 const News = require("../models/news");
+const googleNewsScraper = require("google-news-scraper");
 
 router.get(
   "/",
@@ -68,5 +69,34 @@ function oannData(feeds) {
   });
   return datas;
 }
+
+router.get("/:search", asyncHandler(async(req, res) => {
+  const searchNetwork = req.params.search;
+  console.log('thhis is the search network', searchNetwork);
+  let network = "";
+
+  // make a switch statement for all conservative sites
+  switch (searchNetwork) {
+    case "the-epoch-times":
+      network = "The Epoch Times"
+      break;
+    default:
+      return network;
+  }  
+
+  const search = await googleNewsScraper(
+    {
+      searchTerm: network,
+      prettyURLs: true,
+      timeframe: "5d",
+      puppeteerArgs: ['--no-sandbox', '--disable-setuid-sandbox']
+    }
+  )
+  
+  let networkNews = search.filter(article => article.source === network);
+
+  res.send(networkNews)
+  
+}))
 
 module.exports = router;

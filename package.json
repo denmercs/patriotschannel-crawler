@@ -22,7 +22,8 @@
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.5"
+    "mongoose": "^5.11.5",
+    "rss-parser": "^3.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"

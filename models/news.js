@@ -9,38 +9,29 @@ const newsSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  authors: [
-    {
-      type: String,
-    },
-  ],
   title: {
     type: String,
     require: true,
   },
+  source: [
+    {
+      type: String,
+    },
+  ],
   pubDate: {
     type: String,
-    require: true,
   },
   country: {
     type: String,
-    require: true,
   },
   language: {
     type: String,
-    require: true,
-  },
-  description: {
-    type: String,
-    require: true,
   },
   imageUrl: {
     type: String,
-    require: true,
   },
   content: {
     type: String,
-    require: true,
   },
   comments: [
     {

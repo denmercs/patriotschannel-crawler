@@ -78,7 +78,13 @@ router.get("/:search", asyncHandler(async(req, res) => {
   // make a switch statement for all conservative sites
   switch (searchNetwork) {
     case "the-epoch-times":
-      network = "The Epoch Times"
+      network = "The Epoch Times";
+      break;
+    case "one-america-news-network":
+      network = "One America News Network";
+      break;
+    case "newsmax":
+      network = "Newsmax";
       break;
     default:
       return network;

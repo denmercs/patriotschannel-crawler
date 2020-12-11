@@ -25,11 +25,9 @@ const newsSchema = mongoose.Schema({
   language: {
     type: String,
   },
-  imageUrl: [
-    {
-      type: String,
-    },
-  ],
+  imageUrl: {
+    type: String,
+  },
 
   content: {
     type: String,

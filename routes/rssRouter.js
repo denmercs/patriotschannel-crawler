@@ -11,7 +11,9 @@ router.get(
       "https://www.newsmax.com/rss/Politics/1/"
     );
 
-    const oann = await parser.parseURL("http://www.oann.com/feed/");
+    const oann = await parser.parseURL(
+      "https://www.oann.com/category/newsroom/feed/"
+    );
     const thegatewaypundit = await parser.parseURL(
       "http://www.thegatewaypundit.com/feed/?PageSpeed=noscript"
     );
@@ -24,8 +26,6 @@ router.get(
     const breitbart = await parser.parseURL(
       "https://www.breitbartunmasked.com/category/latest-news/feed/"
     );
-
-    res.status(200).json(oann);
 
     let oannDatas;
     if (oann !== undefined) {
@@ -41,11 +41,14 @@ router.get(
 function oannDataRefactor(feeds) {
   let datas = [];
   feeds.items.map((feed) => {
+    let url = feed.content.match(/src\/?[^>]+>/gi);
+    url = url[0].replace("src=", "");
+
     datas.push({
       title: feed.title,
       url: feed.link,
       source: "OANN",
-      imageUrl: feed.content.match(/<img\/?[^>]+>/gi),
+      imageUrl: url,
       pubDate: feed.pubDate,
       content: feed.content.replace(/<\/?[^>]+>/gi, ""),
     });
@@ -54,9 +57,8 @@ function oannDataRefactor(feeds) {
 }
 
 async function saveNewsDatas(news, newsSource) {
-  console.log("this is the news", news);
-  const newsData = await News.find();
   if (news !== undefined) {
+    const newsData = await News.find();
     news.map((item, index) => {
       if (newsData.length === 0 || item.title !== newsData[index].title) {
         News.insertMany({
@@ -70,6 +72,7 @@ async function saveNewsDatas(news, newsSource) {
       }
     });
   }
+  return;
 }
 
 module.exports = router;

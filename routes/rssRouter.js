@@ -93,9 +93,54 @@ router.get("/:search", asyncHandler(async(req, res) => {
     }
   )
   
-  let networkNews = search.filter(article => article.source === network);
+  let updatedArticle = [];
+  search.filter(article => {
 
-  res.send(networkNews)
+    // if the search article is found
+    if(article.source === network) {
+      // modify the date published from string to date format
+      let publishedDate = article.time.split(" ")
+      let date = new Date();
+
+      if(publishedDate[1] === "days") {
+        let refactoredDate = `${date.getFullYear()}-${(date.getMonth() + 1)}-${(date.getDate() - publishedDate[0])}`;
+        updatedArticle.push({
+          title: article.title,
+          url: article.link,
+          imageUrl: article.image,
+          source: article.source,
+          content: article.subtitle,
+          pubDate: refactoredDate
+        })
+      }
+      if (publishedDate[1] === "hours" && publishedDate[1] === "minutes") {
+        let refactoredDate = `${date.getFullYear()}-${(date.getMonth() + 1)}-${(date.getDate())}`;
+        updatedArticle.push({
+          title: article.title,
+          url: article.link,
+          imageUrl: article.image,
+          source: article.source,
+          content: article.subtitle,
+          pubDate: refactoredDate
+        })
+      }
+      if (publishedDate[0].toLowerCase() === "yesterday") {
+        let refactoredDate = `${date.getFullYear()}-${(date.getMonth() + 1)}-${(date.getDate() - 1)}`;
+        updatedArticle.push({
+          title: article.title,
+          url: article.link,
+          imageUrl: article.image,
+          source: article.source,
+          content: article.subtitle,
+          pubDate: refactoredDate
+        })
+      }
+    }
+  });
+
+
+
+  res.send(updatedArticle)
   
 }))
 

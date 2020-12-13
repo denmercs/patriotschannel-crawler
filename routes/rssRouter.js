@@ -53,16 +53,24 @@ router.get(
         });
       });
       res.status(200).json({ message: "Added" });
-    } else if (newsDatabase.length) {
-      let titles = newsDatabase.map((article) => article.title);
-
-      let news = filteredNewsSource.map((article, index) => {
-        if (!article.title.includes(titles[index])) {
-          return article;
+    } else {
+      filteredNewsSource.map(async (article) => {
+        let data = await News.find({ url: article.link });
+        if (Object.keys(data).length === 0) {
+          let refactoredDate = changeDate(article);
+          News.insertMany({
+            title: article.title,
+            url: article.link,
+            source: article.source,
+            imageUrl: article.image,
+            content: article.subtitle,
+            pubDate: refactoredDate,
+          });
+        } else {
+          return;
         }
       });
-
-      res.status(200).json(news);
+      res.status(200).json({ message: "Database updated!" });
     }
   })
 );

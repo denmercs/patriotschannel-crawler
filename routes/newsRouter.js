@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
 const News = require("../models/news");
-const googleNewsScraper = require("google-news-scraper");
 
 // @desc    Post reactions in the news comment
 // @route   GET /news/
@@ -12,8 +11,13 @@ router.get(
     let newsData = await News.aggregate([
       {
         $group: {
-          _id: { url: "$url", source: "$source", title: "$title" },
-          likes: { $sum: "$likes" },
+          _id: {
+            url: "$url",
+            source: "$source",
+            title: "$title",
+            likes: { $size: "$likes" },
+          },
+          // likes: { count: { $size: "$likes" } },
         },
       },
     ]);

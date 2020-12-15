@@ -9,26 +9,11 @@ const googleNewsScraper = require("google-news-scraper");
 router.get(
   "/:search",
   asyncHandler(async (req, res) => {
-    const searchNetwork = req.params.search;
-    let network = "";
+    let network = req.params.search.replace(/-/g, " ");
+    network = network.replace(/\b\w/g, (c) => c.toUpperCase());
+
     const newsDatabase = await News.find();
-    // make a switch statement for all conservative sites
-    switch (searchNetwork) {
-      case "the-epoch-times":
-        network = "The Epoch Times";
-        break;
-      case "one-america-news-network":
-        network = "One America News Network";
-        break;
-      case "newsmax":
-        network = "Newsmax";
-        break;
-      case "breitbart":
-        network = "Breitbart";
-        break;
-      default:
-        return network;
-    }
+
     const search = await googleNewsScraper({
       searchTerm: network,
       prettyURLs: true,

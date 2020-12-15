@@ -1,12 +1,14 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
 const News = require("../models/news");
+const protect = require("../middleware/authMiddleware");
 
 // @desc    Post reactions in the news comment
 // @route   GET /news/
 // @access  private
 router.get(
   "/",
+  protect,
   asyncHandler(async (req, res) => {
     let newsData = await News.aggregate([
       {
@@ -35,6 +37,7 @@ router.get(
 // @access  private
 router.post(
   "/:id",
+  protect,
   asyncHandler(async (req, res) => {
     let { id } = req.params;
     let { authorId, comment } = req.body;
@@ -61,6 +64,7 @@ router.post(
 
 router.post(
   "/likes/:id",
+  protect,
   asyncHandler(async (req, res) => {
     let { id } = req.params;
     let { authorId } = req.body;

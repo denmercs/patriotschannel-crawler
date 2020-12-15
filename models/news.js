@@ -37,6 +37,29 @@ const newsSchema = mongoose.Schema({
   content: {
     type: String,
   },
+
+  factCheck: [
+    {
+      fake: [
+        {
+          authorId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+        },
+      ],
+      facts: [
+        {
+          authorId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+        },
+      ],
+      url: { type: String },
+    },
+  ],
+
   comments: [
     {
       comment: { type: String, require: true },

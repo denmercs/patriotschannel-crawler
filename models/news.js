@@ -13,12 +13,9 @@ const newsSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  source: {
-    type: String,
-  },
   likes: [
     {
-      liked_by: mongoose.Schema.Types.ObjectId,
+      likedBy: mongoose.Schema.Types.ObjectId,
     },
   ],
   pubDate: {
@@ -46,7 +43,7 @@ const newsSchema = mongoose.Schema({
       },
       likes: [
         {
-          liked_by: mongoose.Schema.Types.ObjectId,
+          likedBy: mongoose.Schema.Types.ObjectId,
         },
       ],
       reactions: [
@@ -58,7 +55,7 @@ const newsSchema = mongoose.Schema({
           },
           likes: [
             {
-              liked_by: mongoose.Schema.Types.ObjectId,
+              likedBy: mongoose.Schema.Types.ObjectId,
             },
           ],
           time: {

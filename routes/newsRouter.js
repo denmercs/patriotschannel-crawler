@@ -3,6 +3,9 @@ const asyncHandler = require("express-async-handler");
 const News = require("../models/news");
 const googleNewsScraper = require("google-news-scraper");
 
+// @desc    Scrapping News Articles
+// @route   POST /news/:search
+// @access  public
 router.get(
   "/:search",
   asyncHandler(async (req, res) => {
@@ -71,10 +74,14 @@ router.get(
   })
 );
 
+// @desc    Post comment in the news article
+// @route   POST /news/
+// @access  private
 router.post(
-  "/",
+  "/:id",
   asyncHandler(async (req, res) => {
-    let { id, authorId, comment } = req.body;
+    let { id } = req.params;
+    let { authorId, comment } = req.body;
 
     let updated = await News.updateOne(
       { _id: id },
@@ -84,6 +91,10 @@ router.post(
     res.status(201).json(updated);
   })
 );
+
+// @desc    Post reactions in the news comment
+// @route   POST /news/:id
+// @access  private
 
 function changeDate(article) {
   // modify the date published from string to date format

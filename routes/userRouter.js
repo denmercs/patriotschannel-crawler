@@ -11,18 +11,18 @@ const bcrypt = require("bcryptjs");
 router.post(
   "/register",
   asyncHandler(async (req, res) => {
-    const user = new User({
-      username: req.body.username,
-      email: req.body.email,
-      password: bcrypt.hashSync(req.body.password, 8),
+    const { username, email, password } = req.body;
+    const user = await User.create({
+      username: username,
+      email: email,
+      password: bcrypt.hashSync(password, 8),
     });
 
-    const createdUser = await user.save();
     res.send({
-      _id: createdUser._id,
-      username: createdUser.name,
-      email: createdUser.email,
-      isAdmin: createdUser.isAdmin,
+      _id: user._id,
+      username: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
     });
   })
 );
@@ -48,6 +48,9 @@ router.post(
           token: generateToken(user[0]._id),
         });
         return;
+      } else {
+        res.status(400);
+        throw new Error("Invalid user data");
       }
     }
     res.status(401).send({ message: "Invalid email or password" });

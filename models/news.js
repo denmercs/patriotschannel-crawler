@@ -16,6 +16,11 @@ const newsSchema = mongoose.Schema({
   source: {
     type: String,
   },
+  likes: [
+    {
+      liked_by: mongoose.Schema.Types.ObjectId,
+    },
+  ],
   pubDate: {
     type: String,
   },

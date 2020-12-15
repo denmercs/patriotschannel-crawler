@@ -34,14 +34,37 @@ const newsSchema = mongoose.Schema({
   },
   comments: [
     {
-      type: String,
-      postedBy: {
+      comment: { type: String, require: true },
+      authorId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
-      timestamps: {
-        createdAt: "created_at",
-        updatedAt: "updated_at",
+      likes: [
+        {
+          liked_by: mongoose.Schema.Types.ObjectId,
+        },
+      ],
+      reactions: [
+        {
+          comment: { type: String, require: true },
+          authorId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+          likes: [
+            {
+              liked_by: mongoose.Schema.Types.ObjectId,
+            },
+          ],
+          time: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
+      time: {
+        type: Date,
+        default: Date.now,
       },
     },
   ],

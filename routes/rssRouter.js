@@ -9,7 +9,6 @@ router.get(
     const searchNetwork = req.params.search;
     let network = "";
     const newsDatabase = await News.find();
-
     // make a switch statement for all conservative sites
     switch (searchNetwork) {
       case "the-epoch-times":
@@ -27,18 +26,15 @@ router.get(
       default:
         return network;
     }
-
     const search = await googleNewsScraper({
       searchTerm: network,
       prettyURLs: true,
       timeframe: "5d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-
     let filteredNewsSource = search.filter(
       (article) => article.source === network
     );
-
     if (newsDatabase.length === 0 && newsDatabase !== undefined) {
       filteredNewsSource.map((article) => {
         // if the search article is found
@@ -72,6 +68,20 @@ router.get(
       });
       res.status(200).json({ message: "Database updated!" });
     }
+  })
+);
+
+router.post(
+  "/",
+  asyncHandler(async (req, res) => {
+    let { id, authorId, comment } = req.body;
+
+    let updated = await News.updateOne(
+      { _id: id },
+      { $push: { comments: { comment: comment, authorId: authorId } } }
+    );
+
+    res.status(201).json(updated);
   })
 );
 

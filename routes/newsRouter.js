@@ -12,12 +12,16 @@ router.get(
       {
         $group: {
           _id: {
+            newsId: "$_id",
             url: "$url",
             source: "$source",
             title: "$title",
             likes: { $size: "$likes" },
+            imageUrl: "$imageUrl",
+            content: "$content",
+            pubDate: "$pubDdate",
+            comments: "$comments",
           },
-          // likes: { count: { $size: "$likes" } },
         },
       },
     ]);

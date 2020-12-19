@@ -20,7 +20,7 @@ router.post(
 
     res.send({
       _id: user._id,
-      username: user.name,
+      username: user.username,
       email: user.email,
       isAdmin: user.isAdmin,
     });

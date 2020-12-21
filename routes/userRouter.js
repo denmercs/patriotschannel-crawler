@@ -94,7 +94,7 @@ router.get("/confirmation/:token", async (req, res) => {
       { confirmed: true }
     );
 
-    res.status(200).json({ update: confirmedUpdated });
+    res.redirect("/login");
   } catch (err) {
     res.send(err);
   }

@@ -94,7 +94,7 @@ router.get("/confirmation/:token", async (req, res) => {
       { confirmed: true }
     );
 
-    res.redirect("/login");
+    res.redirect("/users/login");
   } catch (err) {
     res.send(err);
   }

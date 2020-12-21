@@ -26,7 +26,7 @@ router.post(
       // send email to the user's provided email
       await sendEmail(user.email, url);
 
-      res.status(200).json(user);
+      res.status(200).json({ username, email });
     } catch (err) {
       res.status(400).json(err.message);
     }

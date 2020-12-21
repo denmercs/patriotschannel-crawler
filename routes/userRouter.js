@@ -25,9 +25,12 @@ router.post(
       const url = `http://localhost:5000/users/confirmation/${emailToken}`;
 
       // send email to the user's provided email
-      sendEmail(user.email, url);
+      // sendEmail(user.email, url);
 
-      res.status(201).json({ username, email });
+      res.status(201).json({
+        username: user.username,
+        email: user.email,
+      });
     } catch (err) {
       res.status(400).json(err);
     }

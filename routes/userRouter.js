@@ -61,6 +61,12 @@ router.post(
         }
       }
 
+      if (!user) {
+        res
+          .status(400)
+          .json({ message: "Email address not found! Please signup to join!" });
+      }
+
       if (!user.confirmed) {
         res.status(401).json({
           message:

@@ -42,6 +42,7 @@ router.post(
     } catch (err) {
       res.status(400).json(err);
     }
+    return res.redirect("http://localhost:3000/login");
   })
 );
 

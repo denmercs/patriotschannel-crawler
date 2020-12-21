@@ -46,13 +46,13 @@ router.post(
 
       const user = await User.find({ email });
 
-      if (!user && user.length === 0) {
+      if (user.length === 0) {
         res
           .status(400)
           .json({ message: "Email address not found! Please signup to join!" });
       }
 
-      if (!user.confirmed && user.length !== 0) {
+      if (!user.confirmed && user) {
         res.status(401).json({
           message:
             "Please check your email! We just need to validate your email address to activate your Patriots Channel account.",

@@ -26,6 +26,7 @@
     "google-news-scraper": "^1.0.6",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.5",
+    "nodemailer": "^6.4.17",
     "rss-parser": "^3.10.0"
   },
   "devDependencies": {

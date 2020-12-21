@@ -22,10 +22,18 @@ router.post(
       });
 
       let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET);
-      const url = `${process.env.BACKEND_URL}/users/confirmation/${emailToken}`;
+      let url;
+      let environment = process.env.NODE_ENV;
+      let isDevelopment = environment === "development";
+
+      !isDevelopment
+        ? (url = "localhost:5000")
+        : (url = process.env.BACKEND_URL);
+
+      const userURL = `${url}/users/confirmation/${emailToken}`;
 
       // send email to the user's provided email
-      sendEmail(user.email, url);
+      sendEmail(user.email, userURL);
 
       res.status(201).json({
         username: user.username,
@@ -86,17 +94,13 @@ router.post(
 // @access public
 router.get("/confirmation/:token", async (req, res) => {
   try {
-    // let user = User.find({user})
     let token = req.params.token;
     const verified = jwt.verify(token, process.env.EMAIL_SECRET);
-    let confirmedUpdated = await User.updateOne(
-      { _id: verified.id },
-      { confirmed: true }
-    );
-
-    res.redirect("/users/login");
+    await User.updateOne({ _id: verified.id }, { confirmed: true });
   } catch (err) {
     res.send(err);
   }
+
+  return res.redirect("http://localhost:3000/login");
 });
 module.exports = router;

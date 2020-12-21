@@ -4,7 +4,7 @@ const generateToken = require("../utils/generateToken");
 const User = require("../models/users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const main = require("../utils/nodeMailer");
+const sendEmail = require("../utils/nodeMailer");
 // @desc    Auth user and bcrypt password
 // @route   POST /users/register
 // @access  Public
@@ -12,32 +12,24 @@ const main = require("../utils/nodeMailer");
 router.post(
   "/register",
   asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
-    const user = await User.create({
-      username: username,
-      email: email,
-      password: bcrypt.hashSync(password, 8),
-    });
+    try {
+      const { username, email, password } = req.body;
+      const user = await User.create({
+        username: username,
+        email: email,
+        password: bcrypt.hashSync(password, 8),
+      });
 
-    //send email
-    let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET);
-    const url = `http://localhost:5000/confirmation/${emailToken}`;
+      let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET);
+      const url = `http://localhost:5000/users/confirmation/${emailToken}`;
 
-    main(user.email, url);
-    // let info = await transporter.sendMail({
-    //   from: '"Fred Foo 👻" <denmercs@gmail.com>', // sender address
-    //   to: "bar@example.com, baz@example.com", // list of receivers
-    //   subject: "Hello ✔", // Subject line
-    //   text: "Hello world?", // plain text body
-    //   html: "<b>Hello world?</b>", // html body
-    // });
+      // send email to the user's provided email
+      let sentEmail = await sendEmail(user.email, url);
 
-    // res.send({
-    //   _id: user._id,
-    //   username: user.username,
-    //   email: user.email,
-    //   isAdmin: user.isAdmin,
-    // });
+      res.status(200).json(sentEmail);
+    } catch (err) {
+      res.status(400).json(err.message);
+    }
   })
 );
 
@@ -86,12 +78,15 @@ router.post(
 // @access public
 router.get("/confirmation/:token", async (req, res) => {
   try {
-    const {
-      user: { id },
-    } = jwt.verify(req.params.token, process.env.EMAIL_SECRET);
-    await User.update({ confirmed: true }, { where: { id } });
+    // let user = User.find({user})
+    let token = req.params.token;
+    const verified = jwt.verify(token, process.env.EMAIL_SECRET);
+    let confirmedUpdated = await User.updateOne(
+      { _id: verified.id },
+      { confirmed: true }
+    );
 
-    console.log("this is the user", user);
+    res.status(200).json({ update: confirmedUpdated });
   } catch (err) {
     res.send(err);
   }

@@ -75,6 +75,10 @@ router.post(
             isAdmin: userFiltered.isAdmin,
             token: generateToken(userFiltered._id),
           });
+        } else {
+          res.status(400).json({
+            message: "Wrong password! Please enter a correct password.",
+          });
         }
       }
     } catch (err) {

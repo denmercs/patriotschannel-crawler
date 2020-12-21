@@ -5,6 +5,7 @@ const User = require("../models/users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/nodeMailer");
+const { Error } = require("mongoose");
 // @desc    Auth user and bcrypt password
 // @route   POST /users/register
 // @access  Public
@@ -26,9 +27,9 @@ router.post(
       // send email to the user's provided email
       await sendEmail(user.email, url);
 
-      res.status(200).json({ username, email });
+      res.status(201).json({ username, email });
     } catch (err) {
-      res.status(400).json(err.message);
+      res.status(400).json(err);
     }
   })
 );
@@ -45,6 +46,19 @@ router.post(
 
       const user = await User.find({ email });
 
+      if (!user && user.length === 0) {
+        res
+          .status(400)
+          .json({ message: "Email address not found! Please signup to join!" });
+      }
+
+      if (!user.confirmed && user.length !== 0) {
+        res.status(401).json({
+          message:
+            "Please check your email! We just need to validate your email address to activate your Patriots Channel account.",
+        });
+      }
+
       if (user && user.confirmed) {
         let userFiltered = user[0];
         if (bcrypt.compareSync(password, userFiltered.password)) {
@@ -56,25 +70,10 @@ router.post(
             isAdmin: userFiltered.isAdmin,
             token: generateToken(userFiltered._id),
           });
-        } else {
-          res.status(400).json({ message: "Invalid login" });
         }
       }
-
-      if (!user) {
-        res
-          .status(400)
-          .json({ message: "Email address not found! Please signup to join!" });
-      }
-
-      if (!user.confirmed) {
-        res.status(401).json({
-          message:
-            "Please check your email! We just need to validate your email address to activate your Patriots Channel account.",
-        });
-      }
     } catch (err) {
-      res.status(401).send({ message: err.message });
+      res.status(401).send(err);
     }
   })
 );

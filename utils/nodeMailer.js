@@ -13,14 +13,13 @@ async function sendEmail(email, url) {
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: '"We The People 👻" <patriotschannelcompany@gmail.com>', // sender address
-    to: "denmercs@gmail.com", // list of receivers
+    to: `${email}`, // list of receivers
     subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
+    text: "We need to authorized your email", // plain text body
     html: `<p>Please click this to authorized email ${url}`, // html body
   });
 
-  return info;
-  // console.log("Message sent: %s", info.messageId);
+  console.log("Message sent: %s", info.messageId);
   // // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
   // // Preview only available when sending through an Ethereal account

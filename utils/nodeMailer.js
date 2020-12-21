@@ -16,7 +16,7 @@ async function sendEmail(email, url) {
     to: `${email}`, // list of receivers
     subject: "Hello ✔", // Subject line
     text: "We need to authorized your email", // plain text body
-    html: `<p>Please click this to authorized email <a href="${url}">Activate</a>`, // html body
+    html: `<p>Please click this to authorized email <a href=${url} target="_blank">Activate</a>`, // html body
   });
 
   console.log("Message sent: %s", info.messageId);

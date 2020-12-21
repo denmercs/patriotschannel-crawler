@@ -24,15 +24,8 @@ router.post(
       let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET, {
         expiresIn: "1hr",
       });
-      let url;
-      let environment = process.env.NODE_ENV;
-      let isDevelopment = environment === "development";
 
-      !isDevelopment
-        ? (url = "localhost:5000")
-        : (url = process.env.BACKEND_URL);
-
-      const userURL = `${url}/users/confirmation/${emailToken}`;
+      const userURL = `${process.env.BACKEND_URL}/users/confirmation/${emailToken}`;
 
       // send email to the user's provided email
       sendEmail(user.email, userURL);

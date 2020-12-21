@@ -22,7 +22,7 @@ router.post(
       });
 
       let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET);
-      const url = `http://localhost:5000/users/confirmation/${emailToken}`;
+      const url = `${process.env.BACKEND_URL}/users/confirmation/${emailToken}`;
 
       // send email to the user's provided email
       sendEmail(user.email, url);

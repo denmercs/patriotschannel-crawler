@@ -21,7 +21,10 @@ router.post(
         password: bcrypt.hashSync(password, 8),
       });
 
-      let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET);
+      let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET, {
+        expiresIn: "1hr",
+      });
+
       let url;
       let environment = process.env.NODE_ENV;
       let isDevelopment = environment === "development";
@@ -34,11 +37,6 @@ router.post(
 
       // send email to the user's provided email
       sendEmail(user.email, userURL);
-
-      res.status(201).json({
-        username: user.username,
-        email: user.email,
-      });
     } catch (err) {
       res.status(400).json(err);
     }

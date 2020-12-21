@@ -15,22 +15,24 @@ router.post(
   asyncHandler(async (req, res) => {
     try {
       const { username, email, password } = req.body;
-      const user = await User.create({
-        username: username,
-        email: email,
-        password: bcrypt.hashSync(password, 8),
-      });
+      const isRegistered = await User.find({ email: email });
 
-      let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET, {
-        expiresIn: "1hr",
-      });
-
-      const userURL = `${process.env.BACKEND_URL}/users/confirmation/${emailToken}`;
-
-      // send email to the user's provided email
-      sendEmail(user.email, userURL);
-
-      res.status(201).json({ message: "registered!" });
+      if (isRegistered.length !== 0) {
+        res.status(400).json({ message: "This email is registered already!" });
+      } else {
+        const user = await User.create({
+          username: username,
+          email: email,
+          password: bcrypt.hashSync(password, 8),
+        });
+        let emailToken = jwt.sign({ id: user._id }, process.env.EMAIL_SECRET, {
+          expiresIn: "1hr",
+        });
+        const userURL = `${process.env.BACKEND_URL}/users/confirmation/${emailToken}`;
+        // send email to the user's provided email
+        sendEmail(user.email, userURL);
+        res.status(201).json({ message: "registered!" });
+      }
     } catch (err) {
       res.status(400).json(err);
     }
@@ -55,14 +57,14 @@ router.post(
           .json({ message: "Email address not found! Please signup to join!" });
       }
 
-      if (!user.confirmed && user) {
+      if (!user[0].confirmed) {
         res.status(401).json({
           message:
             "Please check your email! We just need to validate your email address to activate your Patriots Channel account.",
         });
       }
 
-      if (user && user.confirmed) {
+      if (user[0].confirmed) {
         let userFiltered = user[0];
         if (bcrypt.compareSync(password, userFiltered.password)) {
           res.send({

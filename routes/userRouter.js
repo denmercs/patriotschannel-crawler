@@ -135,7 +135,12 @@ router.post(
 
       if (user !== null) {
         let emailToken = generateToken(user.id, "1h");
-        const userURL = `http://localhost:3000/reset/${emailToken}`;
+        let envUrl;
+        process.env.NODE_ENV === "dev"
+          ? (envUrl = "http://localhost:3000")
+          : (envUrl = process.env.FRONTEND_URL);
+
+        const userURL = `{${envUrl}}/reset/${emailToken}`;
         // send email to the user's provided email
         const message = {
           from: '"We The People 👻" <patriotschannelcompany@gmail.com>', // sender address
@@ -154,6 +159,9 @@ router.post(
   })
 );
 
+// @desc Auth user, reset password & send token
+// @route POST /users/reset
+// @access public
 router.post("/reset", async (req, res) => {
   try {
     let { token, password } = req.body;
@@ -163,12 +171,12 @@ router.post("/reset", async (req, res) => {
     console.log(process.env.NODE_ENV);
 
     if (user) {
-      let passwordUpdated = await User.updateOne(
+      await User.updateOne(
         { _id: user.id },
         { password: bcrypt.hashSync(password, 8) }
       );
 
-      res.status(200).json(passwordUpdated);
+      res.status(200).json({ message: "Password Updated!" });
     }
   } catch (err) {
     res.status(400).json(err);

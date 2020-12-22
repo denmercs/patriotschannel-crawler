@@ -15,9 +15,11 @@ router.post(
   asyncHandler(async (req, res) => {
     try {
       const { username, email, password } = req.body;
-      const isRegistered = await User.findOne([{ email }, { username }]);
+      const isRegistered = await User.findOne({
+        $or: [{ email }, { username }],
+      });
 
-      if (isRegistered.length !== 0) {
+      if (isRegistered !== null) {
         res
           .status(400)
           .json({ message: "This email or username is already registered!" });
@@ -28,15 +30,12 @@ router.post(
           password: bcrypt.hashSync(password, 8),
         });
         const emailToken = generateToken(user._id, "1h");
-
         // check environment variables
         let envUrl;
         process.env.NODE_ENV === "dev"
           ? (envUrl = "http://localhost:5000")
-          : process.env.BACKEND_URL;
-
+          : (envUrl = process.env.BACKEND_URL);
         const userURL = `${envUrl}/users/confirmation/${emailToken}`;
-
         const message = {
           from: '"We The People 👻" <patriotschannelcompany@gmail.com>', // sender address
           to: `${user.email}`, // list of receivers
@@ -44,7 +43,6 @@ router.post(
           text: "We need to authorized your email", // plain text body
           html: `<p>Please click this to authorized email <a href=${userURL} target="_blank">Activate</a>`, // html body
         };
-
         // send email to the user's provided email
         sendEmail(message);
         res.status(201).json({ message: "registered!" });

@@ -160,7 +160,7 @@ router.post("/reset", async (req, res) => {
         { password: bcrypt.hashSync(password, 8) }
       );
 
-      res.status(200).json({ message: "Password Updated!" });
+      res.status(200).json(passwordUpdated);
     }
   } catch (err) {
     res.status(400).json(err);

@@ -143,7 +143,8 @@ router.post(
           ? (envUrl = "http://localhost:3000")
           : (envUrl = process.env.FRONTEND_URL);
 
-        const userURL = `{${envUrl}}/reset/${emailToken}`;
+        const userURL = `${envUrl}/reset/${emailToken}`;
+
         // send email to the user's provided email
         const message = {
           from: '"We The People 👻" <patriotschannelcompany@gmail.com>', // sender address

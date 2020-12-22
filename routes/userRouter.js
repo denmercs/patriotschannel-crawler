@@ -102,7 +102,7 @@ router.post(
 );
 
 // @desc    Auth user, match password & send token
-// @route   POST /users/login
+// @route   POST /users/confirmation/:token
 // @access public
 router.get("/confirmation/:token", async (req, res) => {
   try {
@@ -112,8 +112,11 @@ router.get("/confirmation/:token", async (req, res) => {
   } catch (err) {
     res.send(err);
   }
-
-  return res.redirect("http://localhost:3000/login");
+  let envUrl;
+  process.env.NODE_ENV === "dev"
+    ? (envUrl = "http://localhost:3000")
+    : (envUrl = process.env.FRONTEND_URL);
+  return res.redirect(`${envUrl}/login`);
 });
 
 // @desc Auth user, reset password & send token

@@ -8,9 +8,9 @@ const connectDB = require("./config/db");
 dotenv.config();
 connectDB();
 
-server.get("/", (req, res) => {
-  res.send("Patriot Channel is running!");
-});
+// server.get("/", (req, res) => {
+//   res.send("Patriot Channel is running!");
+// });
 
 const hostname = process.env.HOST || "localhost";
 const port = process.env.PORT || 5000;

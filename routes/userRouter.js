@@ -138,12 +138,12 @@ router.post(
 
       if (user !== null) {
         let emailToken = generateToken(user.id, "1h");
-        let envUrl;
-        process.env.NODE_ENV === "dev"
-          ? (envUrl = "http://localhost:3000")
-          : (envUrl = process.env.FRONTEND_URL);
+        // let envUrl;
+        // process.env.NODE_ENV === "dev"
+        //   ? (envUrl = "http://localhost:3000")
+        //   : (envUrl = process.env.FRONTEND_URL);
 
-        const userURL = `${envUrl}/reset/${emailToken}`;
+        const userURL = `http://localhost:3000/reset/${emailToken}`;
 
         // send email to the user's provided email
         const message = {

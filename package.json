@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "server": "nodemon index.js"
+    "server": "cross-env NODE_ENV=dev nodemon index.js "
   },
   "repository": {
     "type": "git",
@@ -30,6 +30,7 @@
     "rss-parser": "^3.10.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.6"
   }
 }

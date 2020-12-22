@@ -15,10 +15,12 @@ router.post(
   asyncHandler(async (req, res) => {
     try {
       const { username, email, password } = req.body;
-      const isRegistered = await User.find({ email: email });
+      const isRegistered = await User.findOne([{ email }, { username }]);
 
       if (isRegistered.length !== 0) {
-        res.status(400).json({ message: "This email is registered already!" });
+        res
+          .status(400)
+          .json({ message: "This email or username is already registered!" });
       } else {
         const user = await User.create({
           username: username,
@@ -26,7 +28,14 @@ router.post(
           password: bcrypt.hashSync(password, 8),
         });
         const emailToken = generateToken(user._id, "1h");
-        const userURL = `http://localhost:5000/users/confirmation/${emailToken}`;
+
+        // check environment variables
+        let envUrl;
+        process.env.NODE_ENV === "dev"
+          ? (envUrl = "http://localhost:5000")
+          : process.env.BACKEND_URL;
+
+        const userURL = `${envUrl}/users/confirmation/${emailToken}`;
 
         const message = {
           from: '"We The People 👻" <patriotschannelcompany@gmail.com>', // sender address
@@ -153,6 +162,7 @@ router.post("/reset", async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     let user = await User.findOne({ _id: decoded.id });
+    console.log(process.env.NODE_ENV);
 
     if (user) {
       let passwordUpdated = await User.updateOne(

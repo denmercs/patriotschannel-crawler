@@ -10,23 +10,7 @@ router.get(
   "/",
   protect,
   asyncHandler(async (req, res) => {
-    let newsData = await News.aggregate([
-      {
-        $group: {
-          _id: {
-            newsId: "$_id",
-            url: "$url",
-            source: "$source",
-            title: "$title",
-            likes: { $size: "$likes" },
-            imageUrl: "$imageUrl",
-            content: "$content",
-            pubDate: "$pubDdate",
-            comments: "$comments",
-          },
-        },
-      },
-    ]);
+    let newsData = await News.find();
 
     res.status(200).json(newsData);
   })

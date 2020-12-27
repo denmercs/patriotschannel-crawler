@@ -5,7 +5,7 @@ const User = require("../models/users");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/nodeMailer");
-const { Error } = require("mongoose");
+
 // @desc    Auth user and bcrypt password
 // @route   POST /users/register
 // @access  Public

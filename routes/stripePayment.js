@@ -68,28 +68,38 @@ router.post("/create-checkout-session", async (req, res) => {
   // See https://stripe.com/docs/api/checkout/sessions/create
   // for additional parameters to pass.
   try {
+    let line_items_data = [];
+
+    if (modeOfPayment === "payment") {
+      line_items_data.push({
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Stubborn Attachments",
+            images: ["https://i.imgur.com/EHyR2nP.png"],
+          },
+          unit_amount: amount,
+        },
+        quantity: 1,
+      });
+    } else {
+      line_items_data.push({
+        price: priceId,
+        // For metered billing, do not pass quantity
+        quantity: 1,
+      });
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
 
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "Stubborn Attachments",
-              images: ["https://i.imgur.com/EHyR2nP.png"],
-            },
-            unit_amount: amount,
-          },
-          quantity: 1,
-        },
-      ],
+      line_items: line_items_data,
 
       mode: modeOfPayment,
 
-      success_url: `http://localhost:5000?success=true`,
+      success_url: `http://localhost:3000?success=true`,
 
-      cancel_url: `http://localhost:5000?canceled=true`,
+      cancel_url: `http://localhost:3000?canceled=true`,
     });
 
     res.json({ id: session.id });

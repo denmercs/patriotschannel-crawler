@@ -92,13 +92,9 @@ router.post("/create-checkout-session", async (req, res) => {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-
       line_items: line_items_data,
-
       mode: modeOfPayment,
-
       success_url: `http://localhost:3000?success=true`,
-
       cancel_url: `http://localhost:3000?canceled=true`,
     });
 

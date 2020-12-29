@@ -9,7 +9,10 @@ const networksSchema = mongoose.Schema({
   url: {
     type: String,
     require: true,
-    unique: true,
+  },
+  logoUrl: {
+    type: String,
+    require: true,
   },
 });
 

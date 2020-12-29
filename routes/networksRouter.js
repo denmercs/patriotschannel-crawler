@@ -48,7 +48,7 @@ router.get("/updateSchema", async (req, res) => {
     );
     res.send(networks);
   } catch (e) {
-    console.log(e);
+    res.status(400).json(err);
   }
 });
 

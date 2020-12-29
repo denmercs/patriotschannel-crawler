@@ -35,9 +35,7 @@ router.get(
         created_at: { $gte: start, $lt: end },
       });
 
-      let breakingNewsId = breakingNews.map((news) => news._id);
-
-      res.send(breakingNewsId);
+      res.send(breakingNews);
     } catch (err) {
       res.status(400).json(err);
     }

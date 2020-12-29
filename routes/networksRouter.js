@@ -36,4 +36,20 @@ router.get(
   })
 );
 
+router.get("/updateSchema", async (req, res) => {
+  try {
+    let networks = await Networks.updateOne(
+      { name: "Washington Times" },
+      {
+        $set: {
+          name: "The Washington Times",
+        },
+      }
+    );
+    res.send(networks);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 module.exports = router;

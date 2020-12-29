@@ -22,7 +22,7 @@ router.get(
 // @route   POST /news/
 // @access  private
 router.post(
-  "/:id",
+  "/comment/:id",
   protect,
   asyncHandler(async (req, res) => {
     let { id } = req.params;

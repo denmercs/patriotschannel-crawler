@@ -520,43 +520,43 @@ router.get(
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
-    let filteredArticles = articles.filter(
-      (article) => article.source === network[8].name
-    );
+    // let filteredArticles = articles.filter(
+    //   (article) => article.source === network[8].name
+    // );
 
-    if (newsDatabase.length === 0 && newsDatabase !== undefined) {
-      filteredArticles.map((article) => {
-        // if the search article is found
-        let refactoredDate = changeDate(article);
-        News.insertMany({
-          title: article.title,
-          url: article.link,
-          source: article.source,
-          imageUrl: article.image,
-          content: article.subtitle,
-          pubDate: refactoredDate,
-        });
-      });
-      res.status(200).json({ message: "Added" });
-    } else {
-      filteredArticles.map(async (article) => {
-        let data = await News.find({ url: article.link });
-        if (Object.keys(data).length === 0) {
-          let refactoredDate = changeDate(article);
-          News.insertMany({
-            title: article.title,
-            url: article.link,
-            source: article.source,
-            imageUrl: article.image,
-            content: article.subtitle,
-            pubDate: refactoredDate,
-          });
-        } else {
-          return;
-        }
-      });
-      res.status(200).json({ message: "Database updated!" });
-    }
+    // if (newsDatabase.length === 0 && newsDatabase !== undefined) {
+    //   filteredArticles.map((article) => {
+    //     // if the search article is found
+    //     let refactoredDate = changeDate(article);
+    //     News.insertMany({
+    //       title: article.title,
+    //       url: article.link,
+    //       source: article.source,
+    //       imageUrl: article.image,
+    //       content: article.subtitle,
+    //       pubDate: refactoredDate,
+    //     });
+    //   });
+    //   res.status(200).json({ message: "Added" });
+    // } else {
+    //   filteredArticles.map(async (article) => {
+    //     let data = await News.find({ url: article.link });
+    //     if (Object.keys(data).length === 0) {
+    //       let refactoredDate = changeDate(article);
+    //       News.insertMany({
+    //         title: article.title,
+    //         url: article.link,
+    //         source: article.source,
+    //         imageUrl: article.image,
+    //         content: article.subtitle,
+    //         pubDate: refactoredDate,
+    //       });
+    //     } else {
+    //       return;
+    //     }
+    //   });
+    //   res.status(200).json({ message: "Database updated!" });
+    // }
     res.send(articles);
   })
 );

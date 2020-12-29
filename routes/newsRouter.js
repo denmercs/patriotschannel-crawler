@@ -18,6 +18,30 @@ router.get(
   })
 );
 
+// @desc    Get breaking in the news article
+// @route   GET /news/breaking
+// @access  private
+router.get(
+  "/breaking",
+  asyncHandler(async (req, res) => {
+    try {
+      let start = new Date();
+      start.setHours(0, 0, 0, 0);
+
+      let end = new Date();
+      end.setHours(23, 59, 59, 999);
+
+      let breakingNews = await News.find({
+        created_at: { $gte: start, $lt: end },
+      });
+
+      res.send(breakingNews);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  })
+);
+
 // @desc    Post comment in the news article
 // @route   POST /news/
 // @access  private

@@ -11,7 +11,6 @@ server.get("/", (req, res) => {
   res.send("Patriot Channel is running!");
 });
 
-const port = process.env.PORT || 5000;
-server.listen(port, () => {
-  console.log("Running at port " + port);
+server.listen(process.env.PORT || 5000, () => {
+  console.log("Express server listening on port:", process.env.PORT);
 });

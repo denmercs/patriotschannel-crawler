@@ -3,6 +3,7 @@ const userRouter = require("./routes/userRouter");
 const newsRouter = require("./routes/newsRouter");
 const rssRouter = require("./routes/rssRouter");
 const categoriesRouter = require("./routes/categoriesRouter");
+const todayRouter = require("./routes/todayRouter");
 const stripe = require("./routes/stripePayment");
 const networksRouter = require("./routes/networksRouter");
 
@@ -18,5 +19,6 @@ app.use("/news", newsRouter);
 app.use("/stripe", stripe);
 app.use("/networks", networksRouter);
 app.use("/categories", categoriesRouter);
+app.use("/today", todayRouter);
 
 module.exports = app;

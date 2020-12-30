@@ -73,7 +73,6 @@ router.post(
 // get network news routes
 router.get(
   "/the-epoch-times",
-  protect,
   asyncHandler(async (req, res) => {
     let network = await Networks.find();
     const newsDatabase = await News.find();
@@ -127,7 +126,6 @@ router.get(
 
 router.get(
   "/breitbart",
-  protect,
   asyncHandler(async (req, res) => {
     let network = await Networks.find();
     const newsDatabase = await News.find();
@@ -182,7 +180,6 @@ router.get(
 
 router.get(
   "/oann",
-  protect,
   asyncHandler(async (req, res) => {
     let network = await Networks.find();
     const newsDatabase = await News.find();
@@ -237,7 +234,6 @@ router.get(
 
 router.get(
   "/the-federalist",
-  protect,
   asyncHandler(async (req, res) => {
     let network = await Networks.find();
     const newsDatabase = await News.find();
@@ -400,7 +396,6 @@ router.get(
 
 router.get(
   "/washington-times",
-  protect,
   asyncHandler(async (req, res) => {
     let network = await Networks.find();
     const newsDatabase = await News.find();

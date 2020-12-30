@@ -19,7 +19,7 @@ router.get(
       let todaysNews = await News.find({
         created_at: { $gte: startOfDay, $lte: endOfDay },
         $text: {
-          $search: "trump, pence, biden, harris, election, deep state",
+          $search: "trump pence biden harris election deep state",
           $caseSensitive: false,
         },
       });

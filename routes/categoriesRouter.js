@@ -30,7 +30,7 @@ router.get(
     News.createIndexes({ title: "text", content: "text" });
     let categorizedData = await News.find({
       $text: {
-        $search: "health, covid19, covid-19, pandemic",
+        $search: "health, covid19, covid-19, pandemic, vaccines",
         $caseSensitive: false,
       },
     }).sort({ created_at: -1 });

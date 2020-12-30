@@ -80,7 +80,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[0].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -133,7 +133,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[1].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -187,7 +187,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[2].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -241,7 +241,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[4].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -295,7 +295,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[3].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -349,7 +349,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[5].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -403,7 +403,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[6].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -457,7 +457,7 @@ router.get(
     const articles = await googleNewsScraper({
       searchTerm: network[7].name,
       prettyURLs: true,
-      timeframe: "2d",
+      timeframe: "1d",
       puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 

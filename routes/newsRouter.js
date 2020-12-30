@@ -22,8 +22,10 @@ router.get(
 // @route   GET /news/breaking
 // @access  private
 router.get(
-  "/breaking",
+  "/breaking/",
   asyncHandler(async (req, res) => {
+    let { search } = req.body;
+
     try {
       let start = new Date();
       start.setHours(0, 0, 0, 0);
@@ -35,12 +37,27 @@ router.get(
         created_at: { $gte: start, $lt: end },
       });
 
-      res.send(breakingNews);
+      let sorted = [];
+      breakingNews.map((article) => {
+        if (article.title.includes(search)) {
+          sorted.push(article);
+        }
+      });
+
+      res.send(sorted);
     } catch (err) {
       res.status(400).json(err);
     }
   })
 );
+
+function contains(target, pattern) {
+  let value = 0;
+  pattern.forEach((word) => {
+    value = value + target.includes(word);
+  });
+  return value === 1;
+}
 
 // @desc    Post comment in the news article
 // @route   POST /news/

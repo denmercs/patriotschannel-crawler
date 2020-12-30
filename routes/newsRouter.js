@@ -51,14 +51,6 @@ router.get(
   })
 );
 
-function contains(target, pattern) {
-  let value = 0;
-  pattern.forEach((word) => {
-    value = value + target.includes(word);
-  });
-  return value === 1;
-}
-
 // @desc    Post comment in the news article
 // @route   POST /news/
 // @access  private

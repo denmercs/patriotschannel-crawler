@@ -21,7 +21,7 @@ router.get(
 // @desc    Get breaking in the news article
 // @route   GET /news/breaking
 // @access  private
-router.get(
+router.post(
   "/breaking/",
   asyncHandler(async (req, res) => {
     let { search } = req.body;

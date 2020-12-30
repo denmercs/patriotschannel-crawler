@@ -13,6 +13,7 @@ const newsSchema = mongoose.Schema(
     title: {
       type: String,
       require: true,
+      text: true,
     },
     likes: [
       {
@@ -37,6 +38,7 @@ const newsSchema = mongoose.Schema(
 
     content: {
       type: String,
+      text: true,
     },
 
     factCheck: [

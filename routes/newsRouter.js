@@ -21,30 +21,22 @@ router.get(
 // @desc    Get breaking in the news article
 // @route   GET /news/breaking
 // @access  private
-router.post(
-  "/categories/",
+router.get(
+  "/today",
   asyncHandler(async (req, res) => {
-    let { search } = req.body;
-
     try {
-      let start = new Date();
-      start.setHours(0, 0, 0, 0);
+      const startOfDay = new Date(
+        new Date().setUTCHours(0, 0, 0, 0)
+      ).toISOString();
+      const endOfDay = new Date(
+        new Date().setUTCHours(23, 59, 59, 999)
+      ).toISOString();
 
-      let end = new Date();
-      end.setHours(23, 59, 59, 999);
-
-      let breakingNews = await News.find({
-        created_at: { $gte: start, $lt: end },
+      let todaysNews = await News.find({
+        created_at: { $gte: startOfDay, $lte: endOfDay },
       });
 
-      let sorted = [];
-      breakingNews.map((article) => {
-        if (article.title.includes(search)) {
-          sorted.push(article);
-        }
-      });
-
-      res.send(sorted);
+      res.send(todaysNews);
     } catch (err) {
       res.status(400).json(err);
     }

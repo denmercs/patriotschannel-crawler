@@ -2,6 +2,7 @@ const express = require("express");
 const userRouter = require("./routes/userRouter");
 const newsRouter = require("./routes/newsRouter");
 const rssRouter = require("./routes/rssRouter");
+const categoriesRouter = require("./routes/categoriesRouter");
 const stripe = require("./routes/stripePayment");
 const networksRouter = require("./routes/networksRouter");
 
@@ -16,5 +17,6 @@ app.use("/rss", rssRouter);
 app.use("/news", newsRouter);
 app.use("/stripe", stripe);
 app.use("/networks", networksRouter);
+app.use("/categories", categoriesRouter);
 
 module.exports = app;

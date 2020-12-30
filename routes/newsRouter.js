@@ -21,11 +21,9 @@ router.get(
 // @desc    Get breaking in the news article
 // @route   GET /news/breaking
 // @access  private
-router.post(
-  "/categories/",
+router.get(
+  "/today",
   asyncHandler(async (req, res) => {
-    let { search } = req.body;
-
     try {
       let start = new Date();
       start.setHours(0, 0, 0, 0);
@@ -37,14 +35,7 @@ router.post(
         created_at: { $gte: start, $lt: end },
       });
 
-      let sorted = [];
-      breakingNews.map((article) => {
-        if (article.title.includes(search)) {
-          sorted.push(article);
-        }
-      });
-
-      res.send(sorted);
+      res.send(breakingNews);
     } catch (err) {
       res.status(400).json(err);
     }

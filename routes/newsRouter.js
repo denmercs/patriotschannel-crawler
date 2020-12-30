@@ -25,17 +25,18 @@ router.get(
   "/today",
   asyncHandler(async (req, res) => {
     try {
-      let start = new Date();
-      start.setHours(0, 0, 0, 0);
+      const startOfDay = new Date(
+        new Date().setUTCHours(0, 0, 0, 0)
+      ).toISOString();
+      const endOfDay = new Date(
+        new Date().setUTCHours(23, 59, 59, 999)
+      ).toISOString();
 
-      let end = new Date();
-      end.setHours(23, 59, 59, 999);
-
-      let breakingNews = await News.find({
-        created_at: { $gte: start, $lt: end },
+      let todaysNews = await News.find({
+        created_at: { $gte: startOfDay, $lte: endOfDay },
       });
 
-      res.send(breakingNews);
+      res.send(todaysNews);
     } catch (err) {
       res.status(400).json(err);
     }

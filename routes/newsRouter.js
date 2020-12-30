@@ -22,7 +22,7 @@ router.get(
 // @route   GET /news/breaking
 // @access  private
 router.post(
-  "/breaking/",
+  "/categories/",
   asyncHandler(async (req, res) => {
     let { search } = req.body;
 

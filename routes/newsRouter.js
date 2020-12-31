@@ -81,7 +81,7 @@ router.get(
       const articles = await googleNewsScraper({
         searchTerm: "The Epoch Times",
         prettyURLs: true,
-        timeframe: "30d",
+        timeframe: "1d",
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
@@ -122,7 +122,7 @@ router.get(
       const articles = await googleNewsScraper({
         searchTerm: "Breitbart",
         prettyURLs: true,
-        timeframe: "30d",
+        timeframe: "1d",
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
@@ -142,11 +142,11 @@ router.get(
           if (newsDatabase.length !== 0 && urls === 0) {
             addNewsToDatabase(article);
           }
-          res.status(201).json({ message: "Article added, databaes updated!" });
         } catch (err) {
           console.log(err);
         }
       });
+      res.status(201).json({ message: "Article added, databaes updated!" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
@@ -158,6 +158,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       const newsDatabase = await News.find();
+      let network = "One America News Network";
 
       const articles = await googleNewsScraper({
         searchTerm: "One America News Network",
@@ -166,39 +167,27 @@ router.get(
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
-      articles.map(async (article) => {
-        if (article.source === "One America News Network") {
-          if (newsDatabase.length === 0 && newsDatabase !== undefined) {
-            let refactoredDate = changeDate(article);
-            News.insertMany({
-              title: article.title,
-              url: article.link,
-              source: article.source,
-              imageUrl: article.image,
-              content: article.subtitle,
-              pubDate: refactoredDate,
-            });
-            res
-              .status(201)
-              .json({ message: "Added articles in the database!" });
-          } else {
-            let data = await News.find({ url: article.link });
-            if (Object.keys(data).length === 0) {
-              let refactoredDate = changeDate(article);
-              News.insertMany({
-                title: article.title,
-                url: article.link,
-                source: article.source,
-                imageUrl: article.image,
-                content: article.subtitle,
-                pubDate: refactoredDate,
-              });
-              res.status(200).json({ message: "Database updated!" });
-            }
+      let filteredNews = articles.filter(
+        (article) => article.source === network
+      );
+
+      filteredNews.map(async (article) => {
+        // if empty then add them to db
+        try {
+          const urls = await News.countDocuments({ url: article.link });
+
+          if (newsDatabase.length === 0) {
+            addNewsToDatabase(article);
           }
-          res.status(200).json({ message: "No article added in the database" });
+
+          if (newsDatabase.length !== 0 && urls === 0) {
+            addNewsToDatabase(article);
+          }
+        } catch (err) {
+          console.log(err);
         }
       });
+      res.status(201).json({ message: "Article added, databaes updated!" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
@@ -210,6 +199,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       const newsDatabase = await News.find();
+      let network = "The Federalist";
 
       const articles = await googleNewsScraper({
         searchTerm: "The Federalist",
@@ -218,39 +208,27 @@ router.get(
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
-      articles.map(async (article) => {
-        if (article.source === "The Federalist") {
-          if (newsDatabase.length === 0 && newsDatabase !== undefined) {
-            let refactoredDate = changeDate(article);
-            News.insertMany({
-              title: article.title,
-              url: article.link,
-              source: article.source,
-              imageUrl: article.image,
-              content: article.subtitle,
-              pubDate: refactoredDate,
-            });
-            res
-              .status(201)
-              .json({ message: "Added articles in the database!" });
-          } else {
-            let data = await News.find({ url: article.link });
-            if (Object.keys(data).length === 0) {
-              let refactoredDate = changeDate(article);
-              News.insertMany({
-                title: article.title,
-                url: article.link,
-                source: article.source,
-                imageUrl: article.image,
-                content: article.subtitle,
-                pubDate: refactoredDate,
-              });
-              res.status(200).json({ message: "Database updated!" });
-            }
+      let filteredNews = articles.filter(
+        (article) => article.source === network
+      );
+
+      filteredNews.map(async (article) => {
+        // if empty then add them to db
+        try {
+          const urls = await News.countDocuments({ url: article.link });
+
+          if (newsDatabase.length === 0) {
+            addNewsToDatabase(article);
           }
-          res.status(200).json({ message: "No article added in the database" });
+
+          if (newsDatabase.length !== 0 && urls === 0) {
+            addNewsToDatabase(article);
+          }
+        } catch (err) {
+          console.log(err);
         }
       });
+      res.status(201).json({ message: "Article added, databaes updated!" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
@@ -262,6 +240,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       const newsDatabase = await News.find();
+      let network = "Newsmax";
 
       const articles = await googleNewsScraper({
         searchTerm: "Newsmax",
@@ -270,39 +249,27 @@ router.get(
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
-      articles.map(async (article) => {
-        if (article.source === "Newsmax") {
-          if (newsDatabase.length === 0 && newsDatabase !== undefined) {
-            let refactoredDate = changeDate(article);
-            News.insertMany({
-              title: article.title,
-              url: article.link,
-              source: article.source,
-              imageUrl: article.image,
-              content: article.subtitle,
-              pubDate: refactoredDate,
-            });
-            res
-              .status(201)
-              .json({ message: "Added articles in the database!" });
-          } else {
-            let data = await News.find({ url: article.link });
-            if (Object.keys(data).length === 0) {
-              let refactoredDate = changeDate(article);
-              News.insertMany({
-                title: article.title,
-                url: article.link,
-                source: article.source,
-                imageUrl: article.image,
-                content: article.subtitle,
-                pubDate: refactoredDate,
-              });
-              res.status(200).json({ message: "Database updated!" });
-            }
+      let filteredNews = articles.filter(
+        (article) => article.source === network
+      );
+
+      filteredNews.map(async (article) => {
+        // if empty then add them to db
+        try {
+          const urls = await News.countDocuments({ url: article.link });
+
+          if (newsDatabase.length === 0) {
+            addNewsToDatabase(article);
           }
-          res.status(200).json({ message: "No article added in the database" });
+
+          if (newsDatabase.length !== 0 && urls === 0) {
+            addNewsToDatabase(article);
+          }
+        } catch (err) {
+          console.log(err);
         }
       });
+      res.status(201).json({ message: "Article added, databaes updated!" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
@@ -314,6 +281,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       const newsDatabase = await News.find();
+      let network = "American Thinker";
 
       const articles = await googleNewsScraper({
         searchTerm: "American Thinker",
@@ -322,43 +290,27 @@ router.get(
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
-      articles.map(async (article) => {
-        if (article.source === "American Thinker") {
-          if (newsDatabase.length === 0 && newsDatabase !== undefined) {
-            let refactoredDate = changeDate(article);
-            News.insertMany({
-              title: article.title,
-              url: article.link,
-              source: article.source,
-              imageUrl: article.image,
-              content: article.subtitle,
-              pubDate: refactoredDate,
-            });
-            res
-              .status(201)
-              .json({ message: "Added articles in the database!" });
-          } else {
-            try {
-              let data = await News.find({ url: article.link });
-              if (Object.keys(data).length === 0) {
-                let refactoredDate = changeDate(article);
-                News.insertMany({
-                  title: article.title,
-                  url: article.link,
-                  source: article.source,
-                  imageUrl: article.image,
-                  content: article.subtitle,
-                  pubDate: refactoredDate,
-                });
-                res.status(200).json({ message: "Database updated!" });
-              }
-            } catch (err) {
-              res.status(400).json({ message: err.message });
-            }
+      let filteredNews = articles.filter(
+        (article) => article.source === network
+      );
+
+      filteredNews.map(async (article) => {
+        // if empty then add them to db
+        try {
+          const urls = await News.countDocuments({ url: article.link });
+
+          if (newsDatabase.length === 0) {
+            addNewsToDatabase(article);
           }
-          res.status(200).json({ message: "No article added in the database" });
+
+          if (newsDatabase.length !== 0 && urls === 0) {
+            addNewsToDatabase(article);
+          }
+        } catch (err) {
+          console.log(err);
         }
       });
+      res.status(201).json({ message: "Article added, databaes updated!" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
@@ -370,6 +322,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       const newsDatabase = await News.find();
+      let network = "Washington Times";
 
       const articles = await googleNewsScraper({
         searchTerm: "Washington Times",
@@ -378,43 +331,27 @@ router.get(
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
-      articles.map(async (article) => {
-        if (article.source === "Washington Times") {
-          if (newsDatabase.length === 0 && newsDatabase !== undefined) {
-            let refactoredDate = changeDate(article);
-            News.insertMany({
-              title: article.title,
-              url: article.link,
-              source: article.source,
-              imageUrl: article.image,
-              content: article.subtitle,
-              pubDate: refactoredDate,
-            });
-            res
-              .status(201)
-              .json({ message: "Added articles in the database!" });
-          } else {
-            try {
-              let data = await News.find({ url: article.link });
-              if (Object.keys(data).length === 0) {
-                let refactoredDate = changeDate(article);
-                News.insertMany({
-                  title: article.title,
-                  url: article.link,
-                  source: article.source,
-                  imageUrl: article.image,
-                  content: article.subtitle,
-                  pubDate: refactoredDate,
-                });
-                res.status(200).json({ message: "Database updated!" });
-              }
-            } catch (err) {
-              res.status(400).json({ message: err.message });
-            }
+      let filteredNews = articles.filter(
+        (article) => article.source === network
+      );
+
+      filteredNews.map(async (article) => {
+        // if empty then add them to db
+        try {
+          const urls = await News.countDocuments({ url: article.link });
+
+          if (newsDatabase.length === 0) {
+            addNewsToDatabase(article);
           }
-          res.status(200).json({ message: "No article added in the database" });
+
+          if (newsDatabase.length !== 0 && urls === 0) {
+            addNewsToDatabase(article);
+          }
+        } catch (err) {
+          console.log(err);
         }
       });
+      res.status(201).json({ message: "Article added, databaes updated!" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
@@ -426,6 +363,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       const newsDatabase = await News.find();
+      let network = "Christianity Daily";
 
       const articles = await googleNewsScraper({
         searchTerm: "Christianity Daily",
@@ -434,43 +372,27 @@ router.get(
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
-      articles.map(async (article) => {
-        if (article.source === "Christianity Daily") {
-          if (newsDatabase.length === 0 && newsDatabase !== undefined) {
-            let refactoredDate = changeDate(article);
-            News.insertMany({
-              title: article.title,
-              url: article.link,
-              source: article.source,
-              imageUrl: article.image,
-              content: article.subtitle,
-              pubDate: refactoredDate,
-            });
-            res
-              .status(201)
-              .json({ message: "Added articles in the database!" });
-          } else {
-            try {
-              let data = await News.find({ url: article.link });
-              if (Object.keys(data).length === 0) {
-                let refactoredDate = changeDate(article);
-                News.insertMany({
-                  title: article.title,
-                  url: article.link,
-                  source: article.source,
-                  imageUrl: article.image,
-                  content: article.subtitle,
-                  pubDate: refactoredDate,
-                });
-                res.status(200).json({ message: "Database updated!" });
-              }
-            } catch (err) {
-              res.status(400).json({ message: err.message });
-            }
+      let filteredNews = articles.filter(
+        (article) => article.source === network
+      );
+
+      filteredNews.map(async (article) => {
+        // if empty then add them to db
+        try {
+          const urls = await News.countDocuments({ url: article.link });
+
+          if (newsDatabase.length === 0) {
+            addNewsToDatabase(article);
           }
-          res.status(200).json({ message: "No article added in the database" });
+
+          if (newsDatabase.length !== 0 && urls === 0) {
+            addNewsToDatabase(article);
+          }
+        } catch (err) {
+          console.log(err);
         }
       });
+      res.status(201).json({ message: "Article added, databaes updated!" });
     } catch (err) {
       res.status(400).json({ message: err.message });
     }

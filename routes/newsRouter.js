@@ -154,8 +154,11 @@ router.get(
 );
 
 router.get(
-  "/oann",
+  "/oann/:hours",
   asyncHandler(async (req, res) => {
+    let { hours } = req.params;
+
+    console.log(hours);
     try {
       const newsDatabase = await News.find();
       let network = "One America News Network";
@@ -163,7 +166,7 @@ router.get(
       const articles = await googleNewsScraper({
         searchTerm: "One America News Network",
         prettyURLs: true,
-        timeframe: "1d",
+        timeframe: hours,
         puppeteerArgs: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 

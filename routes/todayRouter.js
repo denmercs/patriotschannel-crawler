@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
+const { updateOne } = require("../models/news");
 const News = require("../models/news");
 
 // @desc    Get breaking in the news article
@@ -10,7 +11,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       // pubdate
-      let newsToday = [];
+      let updatedArticles = [];
       let date = new Date();
       let today = `${date.getUTCFullYear()}-${
         date.getUTCMonth() + 1
@@ -31,7 +32,8 @@ router.get(
           $caseSensitive: false,
         },
       });
-      newsToday.push(...todaysNews);
+
+      updatedArticles.push(...todaysNews);
 
       let createdAtNews = await News.find({
         created_at: { $gte: startOfDay, $lte: endOfDay },
@@ -41,9 +43,13 @@ router.get(
         },
       });
 
-      newsToday.push(...createdAtNews);
+      for (let i = 0; i < todaysNews.length; i++) {
+        if (todaysNews[i].title !== createdAtNews[i].title) {
+          updatedArticles.push(createdAtNews[i]);
+        }
+      }
 
-      res.send(newsToday);
+      res.send(updatedArticles);
     } catch (err) {
       res.status(400).json(err);
     }

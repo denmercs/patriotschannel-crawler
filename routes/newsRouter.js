@@ -81,7 +81,6 @@ router.get(
       match.toUpperCase()
     );
 
-    console.log(networkName);
     try {
       const newsDatabase = await News.find();
       let network = "The Epoch Times";

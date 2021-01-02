@@ -10,9 +10,11 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       let date = new Date();
-      let today = `${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()}`;
+      let today = `${date.getUTCFullYear()}-${
+        date.getUTCMonth() + 1
+      }-${date.getUTCDate()}`;
+
+      console.log(today);
 
       let todaysNews = await News.find({
         pubDate: today,

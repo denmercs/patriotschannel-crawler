@@ -61,7 +61,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       // pubdate
-      let newsToday = [];
+      let updatedArticles = [];
       let date = new Date();
       let today = `${date.getUTCFullYear()}-${
         date.getUTCMonth() + 1
@@ -81,9 +81,9 @@ router.get(
           $search: "covid-19, pandemic, vaccine, vaccines, bill gates, fauci",
           $caseSensitive: false,
         },
-        _id: false,
       });
-      newsToday.push(...todaysNews);
+
+      updatedArticles.push(...todaysNews);
 
       let createdAtNews = await News.find({
         created_at: { $gte: startOfDay, $lte: endOfDay },
@@ -93,9 +93,13 @@ router.get(
         },
       });
 
-      newsToday.push(...createdAtNews);
+      for (let i = 0; i < todaysNews.length; i++) {
+        if (todaysNews[i].title !== createdAtNews[i].title) {
+          updatedArticles.push(createdAtNews[i]);
+        }
+      }
 
-      res.send(newsToday);
+      res.send(updatedArticles);
     } catch (err) {
       res.status(400).json(err);
     }

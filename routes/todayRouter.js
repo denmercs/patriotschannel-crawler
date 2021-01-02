@@ -31,7 +31,7 @@ router.get(
           $caseSensitive: false,
         },
       });
-      newsToday.push(todaysNews);
+      newsToday.push(...todaysNews);
 
       let createdAtNews = await News.find({
         created_at: { $gte: startOfDay, $lte: endOfDay },
@@ -41,7 +41,7 @@ router.get(
         },
       });
 
-      newsToday.push(createdAtNews);
+      newsToday.push(...createdAtNews);
 
       res.send(newsToday);
     } catch (err) {
@@ -75,8 +75,9 @@ router.get(
           $search: "covid-19, pandemic, vaccine, vaccines, bill gates, fauci",
           $caseSensitive: false,
         },
+        _id: false,
       });
-      newsToday.push(todaysNews);
+      newsToday.push(...todaysNews);
 
       let createdAtNews = await News.find({
         created_at: { $gte: startOfDay, $lte: endOfDay },
@@ -86,7 +87,7 @@ router.get(
         },
       });
 
-      newsToday.push(createdAtNews);
+      newsToday.push(...createdAtNews);
 
       res.send(newsToday);
     } catch (err) {

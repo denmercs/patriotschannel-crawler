@@ -1,12 +1,11 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
-const { updateOne } = require("../models/news");
 const News = require("../models/news");
 const moment = require("moment");
 
-// @desc    Get breaking in the news article
-// @route   GET /news/breaking
-// @access  private
+// @desc    Get todays news article
+// @route   GET /today/politics
+// @access  public
 router.get(
   "/politics",
   asyncHandler(async (req, res) => {
@@ -30,6 +29,9 @@ router.get(
   })
 );
 
+// @desc    Get todays news article
+// @route   GET /today/health
+// @access  public
 router.get(
   "/health",
   asyncHandler(async (req, res) => {

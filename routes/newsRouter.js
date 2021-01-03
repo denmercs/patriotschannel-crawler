@@ -4,6 +4,7 @@ const News = require("../models/news");
 const protect = require("../middleware/authMiddleware");
 const Networks = require("../models/networks");
 const googleNewsScraper = require("google-news-scraper");
+const moment = require("moment");
 
 // @desc    Post reactions in the news comment
 // @route   GET /news/
@@ -121,36 +122,45 @@ router.get(
 function changeDate(article) {
   // modify the date published from string to date format
   let publishedDate = article.time.split(" ");
-  let date = new Date();
 
-  let refactoredDate = "";
+  console.log("checking this" + publishedDate);
+  let refactoredDate;
   if (publishedDate[1] === "days") {
-    refactoredDate = `${date.getFullYear()}-${date.getMonth() + 1}-${
-      date.getDate() - publishedDate[0]
-    }`;
-  } else if (
+    refactoredDate = moment().subtract(publishedDate[0], "days").format("L");
+  }
+
+  if (publishedDate[0] === "Dec") {
+    refactoredDate = moment(`202012${publishedDate[1]}`, "YYYYMMDD").format(
+      "L"
+    );
+  }
+  if (publishedDate[0] === "Nov") {
+    refactoredDate = moment(`202011${publishedDate[1]}`, "YYYYMMDD").format(
+      "L"
+    );
+  }
+
+  if (
     publishedDate[1] === "hours" ||
+    publishedDate[1] === "hour" ||
     publishedDate[1] === "minutes" ||
     publishedDate[1] === "seconds"
   ) {
-    refactoredDate = `${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()}`;
-  } else if (publishedDate[0] === "yesterday") {
-    refactoredDate = `${date.getFullYear()}-${date.getMonth() + 1}-${
-      date.getDate() - 1
-    }`;
-  } else {
-    refactoredDate = `${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()}`;
+    refactoredDate = moment().format("L");
   }
+
+  if (publishedDate[0].toLowerCase() === "yesterday") {
+    refactoredDate = moment().subtract(1, "days").format("L");
+  }
+
   return refactoredDate;
 }
 
 function addNewsToDatabase(article) {
   let refactoredDate = changeDate(article);
+
   console.log(refactoredDate);
+
   News.insertMany({
     title: article.title,
     url: article.link,

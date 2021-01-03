@@ -123,7 +123,6 @@ function changeDate(article) {
   // modify the date published from string to date format
   let publishedDate = article.time.split(" ");
 
-  console.log("checking this" + publishedDate);
   let refactoredDate;
   if (publishedDate[1] === "days") {
     refactoredDate = moment().subtract(publishedDate[0], "days").format("L");
@@ -158,8 +157,6 @@ function changeDate(article) {
 
 function addNewsToDatabase(article) {
   let refactoredDate = changeDate(article);
-
-  console.log(refactoredDate);
 
   News.insertMany({
     title: article.title,

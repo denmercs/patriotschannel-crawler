@@ -18,18 +18,14 @@
   },
   "homepage": "https://github.com/denmercs/patriotschannel-be#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "google-news-scraper": "^1.0.6",
-    "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.11.5",
-    "nodemailer": "^6.4.17",
-    "rss-parser": "^3.10.0",
-    "stripe": "^8.129.0"
+    "rss-parser": "^3.10.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

@@ -4,6 +4,7 @@ const News = require("../models/news");
 const protect = require("../middleware/authMiddleware");
 const Networks = require("../models/networks");
 const googleNewsScraper = require("google-news-scraper");
+const moment = require("moment");
 
 // @desc    Post reactions in the news comment
 // @route   GET /news/
@@ -74,16 +75,14 @@ router.post(
 router.get(
   "/:network/:hours",
   asyncHandler(async (req, res) => {
-    const { hours, network } = req.params;
-
-    let name = network.replace(/-/g, " ");
-    networkName = name.replace(/(^\w{1})|(\s{1}\w{1})/g, (match) =>
-      match.toUpperCase()
-    );
-
     try {
       const newsDatabase = await News.find();
-      let network = "The Epoch Times";
+      const { hours, network } = req.params;
+
+      let name = network.replace(/-/g, " ");
+      let networkName = name.replace(/(^\w{1})|(\s{1}\w{1})/g, (match) =>
+        match.toUpperCase()
+      );
 
       const articles = await googleNewsScraper({
         searchTerm: networkName,
@@ -93,7 +92,7 @@ router.get(
       });
 
       let filteredNews = articles.filter(
-        (article) => article.source === network
+        (article) => article.source === networkName
       );
 
       filteredNews.map(async (article) => {
@@ -122,26 +121,42 @@ router.get(
 function changeDate(article) {
   // modify the date published from string to date format
   let publishedDate = article.time.split(" ");
-  let date = new Date();
-  let refactoredDate = "";
+
+  let refactoredDate;
   if (publishedDate[1] === "days") {
-    refactoredDate = `${date.getFullYear()}-${date.getMonth() + 1}-${
-      date.getDate() - publishedDate[0]
-    }`;
-  } else if (publishedDate[1] === "hours" || publishedDate[1] === "minutes") {
-    refactoredDate = `${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()}`;
-  } else if (publishedDate[0] === "yesterday") {
-    refactoredDate = `${date.getFullYear()}-${date.getMonth() + 1}-${
-      date.getDate() - 1
-    }`;
+    refactoredDate = moment().subtract(publishedDate[0], "days").format("L");
   }
+
+  if (publishedDate[0] === "Dec") {
+    refactoredDate = moment(`202012${publishedDate[1]}`, "YYYYMMDD").format(
+      "L"
+    );
+  }
+  if (publishedDate[0] === "Nov") {
+    refactoredDate = moment(`202011${publishedDate[1]}`, "YYYYMMDD").format(
+      "L"
+    );
+  }
+
+  if (
+    publishedDate[1] === "hours" ||
+    publishedDate[1] === "hour" ||
+    publishedDate[1] === "minutes" ||
+    publishedDate[1] === "seconds"
+  ) {
+    refactoredDate = moment().format("L");
+  }
+
+  if (publishedDate[0].toLowerCase() === "yesterday") {
+    refactoredDate = moment().subtract(1, "days").format("L");
+  }
+
   return refactoredDate;
 }
 
 function addNewsToDatabase(article) {
   let refactoredDate = changeDate(article);
+
   News.insertMany({
     title: article.title,
     url: article.link,

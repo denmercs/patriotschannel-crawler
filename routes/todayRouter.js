@@ -1,21 +1,19 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
 const News = require("../models/news");
+const moment = require("moment");
 
-// @desc    Get breaking in the news article
-// @route   GET /news/breaking
-// @access  private
+// @desc    Get todays news article
+// @route   GET /today/politics
+// @access  public
 router.get(
   "/politics",
   asyncHandler(async (req, res) => {
     try {
-      let date = new Date();
-      let today = `${date.getUTCFullYear()}-${
-        date.getUTCMonth() + 1
-      }-${date.getUTCDate()}`;
+      // get the pubdate
+      let today = moment().format("L");
 
       console.log(today);
-
       let todaysNews = await News.find({
         pubDate: today,
         $text: {
@@ -31,29 +29,17 @@ router.get(
   })
 );
 
+// @desc    Get todays news article
+// @route   GET /today/health
+// @access  public
 router.get(
   "/health",
   asyncHandler(async (req, res) => {
     try {
-      // const startOfDay = new Date(
-      //   new Date().setUTCHours(0, 0, 0, 0)
-      // ).toISOString();
-      // const endOfDay = new Date(
-      //   new Date().setUTCHours(23, 59, 59, 999)
-      // ).toISOString();
+      // get the pubdate
+      let today = moment().format("L");
 
-      // let todaysNews = await News.find({
-      //   pubDate: { $gte: startOfDay, $lte: endOfDay },
-      //   $text: {
-      //     $search: "covid-19, pandemic, vaccine, vaccines, bill gates, fauci",
-      //     $caseSensitive: false,
-      //   },
-      // });
-      let date = new Date();
-      let today = `${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()}`;
-
+      console.log(today);
       let todaysNews = await News.find({
         pubDate: today,
         $text: {

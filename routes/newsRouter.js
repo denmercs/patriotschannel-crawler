@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const asyncHandler = require("express-async-handler");
 const News = require("../models/news");
-const protect = require("../middleware/authMiddleware");
-const Networks = require("../models/networks");
 const googleNewsScraper = require("google-news-scraper");
 const moment = require("moment");
 
@@ -11,7 +9,6 @@ const moment = require("moment");
 // @access  private
 router.get(
   "/",
-  protect,
   asyncHandler(async (req, res) => {
     let newsData = await News.find();
 
@@ -24,7 +21,6 @@ router.get(
 // @access  private
 router.post(
   "/comment/:id",
-  protect,
   asyncHandler(async (req, res) => {
     let { id } = req.params;
     let { authorId, comment } = req.body;
@@ -51,7 +47,6 @@ router.post(
 
 router.post(
   "/likes/:id",
-  protect,
   asyncHandler(async (req, res) => {
     let { id } = req.params;
     let { authorId } = req.body;

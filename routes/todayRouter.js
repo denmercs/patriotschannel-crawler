@@ -11,7 +11,7 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       // get the pubdate
-      let today = moment().utc().format("L");
+      let today = moment().format("L");
 
       console.log(today);
       let todaysNews = await News.find({

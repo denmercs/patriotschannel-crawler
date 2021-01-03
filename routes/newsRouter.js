@@ -76,14 +76,13 @@ router.get(
   "/:network/:hours",
   asyncHandler(async (req, res) => {
     try {
+      const newsDatabase = await News.find();
       const { hours, network } = req.params;
 
       let name = network.replace(/-/g, " ");
       let networkName = name.replace(/(^\w{1})|(\s{1}\w{1})/g, (match) =>
         match.toUpperCase()
       );
-
-      const newsDatabase = await News.find();
 
       const articles = await googleNewsScraper({
         searchTerm: networkName,

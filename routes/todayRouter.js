@@ -59,6 +59,7 @@ router.get(
 router.get(
   "/health",
   asyncHandler(async (req, res) => {
+    // $search: "covid-19, pandemic, vaccine, vaccines, bill gates, fauci",
     try {
       // pubdate
       let updatedArticles = [];

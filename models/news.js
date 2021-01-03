@@ -105,5 +105,15 @@ const newsSchema = mongoose.Schema(
   { timestamps: { createdAt: "created_at", updatedAt: "udpated_at" } }
 );
 
+newsSchema.index(
+  {
+    title: 1,
+    content: 1,
+  },
+  {
+    unique: true,
+  }
+);
+
 const News = mongoose.model("News", newsSchema);
 module.exports = News;

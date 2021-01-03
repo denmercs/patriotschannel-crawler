@@ -78,7 +78,7 @@ router.get(
       const { hours, network } = req.params;
 
       let name = network.replace(/-/g, " ");
-      networkName = name.replace(/(^\w{1})|(\s{1}\w{1})/g, (match) =>
+      let networkName = name.replace(/(^\w{1})|(\s{1}\w{1})/g, (match) =>
         match.toUpperCase()
       );
 
@@ -92,7 +92,7 @@ router.get(
       });
 
       let filteredNews = articles.filter(
-        (article) => article.source === network
+        (article) => article.source === networkName
       );
 
       filteredNews.map(async (article) => {
@@ -122,12 +122,17 @@ function changeDate(article) {
   // modify the date published from string to date format
   let publishedDate = article.time.split(" ");
   let date = new Date();
+
   let refactoredDate = "";
   if (publishedDate[1] === "days") {
     refactoredDate = `${date.getFullYear()}-${date.getMonth() + 1}-${
       date.getDate() - publishedDate[0]
     }`;
-  } else if (publishedDate[1] === "hours" || publishedDate[1] === "minutes") {
+  } else if (
+    publishedDate[1] === "hours" ||
+    publishedDate[1] === "minutes" ||
+    publishedDate[1] === "seconds"
+  ) {
     refactoredDate = `${date.getFullYear()}-${
       date.getMonth() + 1
     }-${date.getDate()}`;
@@ -135,12 +140,17 @@ function changeDate(article) {
     refactoredDate = `${date.getFullYear()}-${date.getMonth() + 1}-${
       date.getDate() - 1
     }`;
+  } else {
+    refactoredDate = `${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}`;
   }
   return refactoredDate;
 }
 
 function addNewsToDatabase(article) {
   let refactoredDate = changeDate(article);
+  console.log(refactoredDate);
   News.insertMany({
     title: article.title,
     url: article.link,
